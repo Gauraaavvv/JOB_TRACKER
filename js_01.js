@@ -1,10 +1,4 @@
-export const applications = [
-  { id: 1, company: "Google", status: "applied", salary: 800000 },
-  { id: 2, company: "Amazon", status: "interview", salary: 1200000 },
-  { id: 3, company: "Microsoft", status: "rejected", salary: 1000000 },
-  { id: 4, company: "Flipkart", status: "applied", salary: 900000 },
-  { id: 5, company: "Atlassian", status: "interview", salary: 1500000 }
-];
+import { applications } from "./data.js"
 
 export function countByStatus (applications, status) {
     const result = applications.filter((apl) => { 
@@ -15,6 +9,8 @@ export function countByStatus (applications, status) {
 }
 
 export function getAverageSalary(applications){
+    if (applications.length === 0)
+        return 0;
     let total = 0
     applications.forEach(apl => {
         total = total + apl.salary
@@ -22,7 +18,7 @@ export function getAverageSalary(applications){
     return total/applications.length
 }
 
-export function getHighestSalary(applications){
+export function getHighestSalaryApplication(applications){
     if(applications.length === 0)
         return null
     let highest = applications[0]
@@ -34,12 +30,16 @@ export function getHighestSalary(applications){
 }
 
 export function filterApplications(applications, status, minSalary) {
-    const filter = applications.filter( apl => apl.status === status && apl.salary === minSalary)
-    return filter
+  return applications.filter((apl) => {
+    const statusMatch = !status || apl.status === status
+    const salaryMatch = minSalary == null || apl.salary >= minSalary
+    return statusMatch && salaryMatch
+  }
+  )
 }
 
 export function removeApplication(applications,id){
-    const updatedApplication = applications.filter(apl => apl.id != id)
+    const updatedApplication = applications.filter(apl => apl.id !== id)
     return updatedApplication
 }
 
@@ -51,17 +51,25 @@ export function updateApplication(applications, id, changes){
     const application = applications.find((apl) => apl.id === id)
     if(!application)
         return null;
-    const updatedApplication = Object.assign(application, changes)
+    const updatedApplication = {...application,...changes}
     return updatedApplication
 }
 
 export function searchApplications(applications, companyName){
-    return applications.filter(apl => apl.company.toLowerCase() === companyName.toLowerCase())
+    const search = companyName.trim().toLowerCase()
+    if(!search)
+        return applications
+    else
+        return applications.filter(apl => {
+            const company = apl.company.trim().toLowerCase()
+            return company.includes(search)
+        })
 }
 
 export function countByCompany(applications, companyName){
-    const company = applications.filter(apl => apl.company.toLowerCase() === companyName.toLowerCase())
-    return company.length
+    const search = companyName.trim().toLowerCase()
+    if(!search) return 0
+    return applications.filter(apl => apl.company.toLowerCase().includes(search)).length
 }
 
 export function getOfferRate(applications){
@@ -70,6 +78,23 @@ export function getOfferRate(applications){
     return applications.filter(apl => apl.status === "offer").length / applications.length * 100
 }
 
+export function getApplicationsByDateRange(applications, startDate, endDate){
+    if(!startDate || !endDate) return []
+   return applications.filter((apl) => new Date(apl.date) >= new Date(startDate) && new Date(apl.date) <= new Date(endDate)
+)} 
+
+export function getRecentApplications(applications, limit){
+    const sortedApplication = applications.slice().sort((a,b) => new Date(b.date) - new Date(a.date)
+    )
+    return sortedApplication.slice(0,limit)
+}
+console.log(
+    getApplicationsByDateRange(
+        applications,
+        "2026-10-12",
+        "2026-10-27"
+    )
+);
 /*console.log(getOfferRate(applications))
 console.log(searchApplications(applications, "amazon"))
 console.log(updateApplicationStatus(applications, 1, "done"))
