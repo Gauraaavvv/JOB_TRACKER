@@ -1,4 +1,3 @@
-import { applications } from "./data.js"
 
 export function countByStatus (applications, status) {
     const result = applications.filter((apl) => { 
@@ -38,23 +37,6 @@ export function filterApplications(applications, status, minSalary) {
   )
 }
 
-export function removeApplication(applications,id){
-    const updatedApplication = applications.filter(apl => apl.id !== id)
-    return updatedApplication
-}
-
-export function getApplicationById(applications, id){
-    return applications.find((apl) => apl.id === id)
-}
-
-export function updateApplication(applications, id, changes){
-    const application = applications.find((apl) => apl.id === id)
-    if(!application)
-        return null;
-    const updatedApplication = {...application,...changes}
-    return updatedApplication
-}
-
 export function searchApplications(applications, companyName){
     const search = companyName.trim().toLowerCase()
     if(!search)
@@ -88,22 +70,3 @@ export function getRecentApplications(applications, limit){
     )
     return sortedApplication.slice(0,limit)
 }
-console.log(
-    getApplicationsByDateRange(
-        applications,
-        "2026-10-12",
-        "2026-10-27"
-    )
-);
-/*console.log(getOfferRate(applications))
-console.log(searchApplications(applications, "amazon"))
-console.log(updateApplicationStatus(applications, 1, "done"))
-console.log(getApplicationById(applications, 2))
-console.log(removeApplication(applications,3))
-console.log(filterApplications(applications, "interview", 1200000));
-console.log(getHighestSalary(applications))
-console.log(getAverageSalary(applications));
-console.log(countByStatus(applications, "applied"));    // 2
-console.log(countByStatus(applications, "interview"));  // 2
-console.log(countByStatus(applications, "rejected"));   // 1
-console.log(countByStatus(applications, "offer")); */   // 0  
