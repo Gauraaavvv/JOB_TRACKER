@@ -17,3 +17,21 @@ export const getJobs= async () => {
 
     return allJobs
 }                 
+
+export const updateJob = async (id,data) => {
+    const updatedJob = await Job.findByIdAndUpdate(
+        id,data,
+        {
+            new: true,
+            runValidators: true
+        }
+    );
+
+    return updatedJob
+}
+
+export const deleteJob = async (id) => {
+    const deletedJob = await Job.findByIdAndDelete(id)
+
+    return deletedJob
+}
