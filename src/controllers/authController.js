@@ -1,4 +1,4 @@
-import { registerUser } from "../service/authService.js"
+import { registerUser, loginUser } from "../service/authService.js"
 
 export const registerController = async (req, res) => {
     try {
@@ -21,3 +21,22 @@ export const registerController = async (req, res) => {
         return res.status(500).json({ message: "Internal server error", err: err.message })
     }
 }
+
+export const loginController = async (req, res) => {
+    try {
+        const { email, password } = req.body
+
+        if (!email || typeof email !== "string" || email.trim() === "") return res.status(400).json("Email is required")
+        if (!password || typeof password !== "string" || password.length <= 6)
+            return res.status(400).json("Password must be atleat ")
+
+        const result = await loginUser(email, password)
+        return res.status(200).json({ message: "Login successful", ...result })
+    } catch (err) {
+        if (err.message === "Invalid credentials")
+            return res.status(401).json({ message: err.message });
+        return res.status(500).json({ message: "Internal server error", err: err.message });
+    }
+
+}
+

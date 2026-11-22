@@ -35,3 +35,9 @@ export const deleteJob = async (id) => {
 
     return deletedJob
 }
+
+export const countByStatus = async (status) => {
+    const statusCount = await job.countDocuments({status: status})
+
+    return statusCount;
+}
