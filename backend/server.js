@@ -1,4 +1,5 @@
 import dotenv from "dotenv"
+import cors from "cors"
 import { connectDB } from "./src/config/db.js"
 import express from "express"
 import authRoutes from "./src/routes/authRoutes.js"
@@ -9,7 +10,7 @@ dotenv.config();
 const app = express()
 const PORT = 3000
 
-
+app.use(cors())
 app.use(express.json())
 app.use("/jobs", jobRoutes)
 app.use("/auth", authRoutes)

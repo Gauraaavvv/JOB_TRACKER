@@ -26,9 +26,9 @@ export const loginController = async (req, res) => {
     try {
         const { email, password } = req.body
 
-        if (!email || typeof email !== "string" || email.trim() === "") return res.status(400).json("Email is required")
-        if (!password || typeof password !== "string" || password.length <= 6)
-            return res.status(400).json("Password must be atleat ")
+        if (!email || typeof email !== "string" || email.trim() === "") return res.status(400).json({ message: "Email is required" })
+        if (!password || typeof password !== "string")
+            return res.status(400).json({ message: "Password is required" })
 
         const result = await loginUser(email, password)
         return res.status(200).json({ message: "Login successful", ...result })
